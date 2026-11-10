@@ -11,23 +11,23 @@
 <body><div class="app">
 <aside>
  <div class="brand"><div class="logo">&lt;/&gt;</div><div><strong>CodeLab</strong><small>Aprenda programação</small></div></div>
- <div class="side-label">Trilhas de aprendizado</div>
+ <div class="side-label">Linguagens</div>
  <div class="tracks">
   <button class="track active" data-track="godot"><i class="dot"></i> Godot · GDScript</button>
   <button class="track" data-track="gml"><i class="dot"></i> GameMaker · GML</button>
  </div>
- <div class="progress"><div class="progress-top"><span>Seu progresso</span><b id="progress-label">0%</b></div><div class="bar"><span id="progress-bar"></span></div><small id="progress-count" style="color:var(--muted)">0 de 20 desafios</small></div>
+ 
 </aside>
 <main class="main">
- <header class="top"><div><div class="eyebrow">Aprender fazendo, não copiando</div><h1 id="track-title">Trilha Godot</h1><p class="sub" id="track-sub">Aprenda GDScript executando código real no navegador.</p></div><div class="xp" id="xp">★ 0 XP</div></header>
+ <header class="top"><div><div class="eyebrow">Biblioteca de código</div><h1 id="track-title">Exemplos Godot</h1><p class="sub" id="track-sub">Consulte, edite e execute exemplos de GDScript.</p></div></header>
  <div class="layout">
-  <section class="challenge-panel"><div class="panel-head"><strong>Desafios</strong><span id="challenge-count">20 atividades</span></div><div class="challenge-list" id="challenge-list"></div></section>
+  <section class="challenge-panel"><div class="panel-head"><strong>Exemplos</strong><span id="challenge-count">20 atividades</span></div><div class="challenge-list" id="challenge-list"></div></section>
   <section class="work-panel">
    <div class="task"><div class="eyebrow" id="task-level">FUNDAMENTOS · 01</div><h2 id="task-title">Seu primeiro script</h2><p id="task-description">Use print() para mostrar uma mensagem no console. Depois, clique em Executar.</p><div class="tags"><span class="tag" id="task-topic">Saída de texto</span><span class="tag">Prática guiada</span></div></div>
-   <div class="editor-head"><strong id="editor-label">EDITOR GDSCRIPT · EXECUÇÃO REAL</strong><span class="run-note">Edite o código e pressione Run no editor</span></div>
-   <div id="editor-area"><div class="embed-wrap"><iframe id="runner" title="Editor Godot executável incorporado" loading="eager" allow="clipboard-read; clipboard-write"></iframe><div class="credit">Editor executável fornecido por <a href="https://coddy.tech/embed/pt?editorLang=godot" target="_blank" rel="noopener">Coddy</a></div></div><div class="hint"><b>Como funciona:</b> o editor incorporado executa GDScript no ambiente Godot da Coddy. O código inicial muda conforme o desafio. A execução e o console ficam dentro desta página.</div></div>
-   <div id="gml-area" hidden><div class="gml-notice"><b>Trilha GameMaker GML</b><p>Os desafios e exemplos desta trilha ficam no CodeLab. A execução oficial de GML depende do GameMaker instalado e da licença/conta do aluno; não existe aqui um compilador GML gratuito incorporável equivalente confirmado. Para completar os exercícios, abra o GameMaker no computador.</p><a href="https://gamemaker.io/" target="_blank" rel="noopener">Abrir GameMaker</a></div></div>
-   <div style="padding:0 16px 16px;display:flex;justify-content:flex-end"><button id="complete" style="border:1px solid #286a5c;background:#12352f;color:#b6fff0;padding:9px 14px;border-radius:9px;font-weight:700">Marcar desafio como concluído ✓</button></div>
+   <div class="editor-head"><strong id="editor-label">EXEMPLO GDSCRIPT · GODOT</strong><span class="run-note">Código de exemplo editável</span></div>
+   <div id="editor-area"><div class="embed-wrap"><iframe id="runner" title="Editor Godot executável incorporado" loading="eager" allow="clipboard-read; clipboard-write"></iframe><div class="credit">Editor executável fornecido por <a href="https://coddy.tech/embed/pt?editorLang=godot" target="_blank" rel="noopener">Coddy</a></div></div><div class="hint"><b>Sobre o editor:</b> o código pode ser editado e executado no ambiente Godot incorporado. Use os exemplos como referência e experimente modificá-los.</div></div>
+   <div id="gml-area" hidden><div class="gml-notice"><b>Biblioteca de exemplos GML</b><p>Esta seção reúne exemplos de GameMaker Language. Para executar e testar os códigos, utilize o GameMaker instalado no computador.</p><a href="https://gamemaker.io/" target="_blank" rel="noopener">Abrir GameMaker</a></div></div>
+   
   </section>
  </div>
 </main></div><div class="toast" id="toast"></div>
@@ -80,11 +80,8 @@ let track="godot",index=0;
 const $=id=>document.getElementById(id);
 function b64url(s){const bytes=new TextEncoder().encode(s);let bin="";bytes.forEach(b=>bin+=String.fromCharCode(b));return btoa(bin).replace(/\+/g,"-").replace(/\//g,"_").replace(/=+$/,"")}
 function current(){return (track==="godot"?godot:gml)[index]}
-function renderList(){const data=track==="godot"?godot:gml;$("challenge-list").innerHTML=data.map((c,i)=>'<button class="challenge '+(i===index?'active ':'')+(isDone(i)?'done':'')+'" data-index="'+i+'"><span class="num">'+(isDone(i)?'✓':String(i+1).padStart(2,'0'))+'</span><span><b>'+c[0]+'</b><small>'+c[4]+'</small></span></button>').join("");document.querySelectorAll(".challenge").forEach(b=>b.onclick=()=>{index=Number(b.dataset.index);render()})}
-function isDone(i){try{return JSON.parse(localStorage.getItem("codelab-"+track)||"[]").includes(i)}catch{return false}}
-function render(){const c=current(),data=track==="godot"?godot:gml; $("track-title").textContent=track==="godot"?"Trilha Godot":"Trilha GameMaker";$("track-sub").textContent=track==="godot"?"Aprenda GDScript executando código real no navegador.":"Pratique lógica e desenvolvimento de jogos com GameMaker Language."; $("task-level").textContent=c[4]+" · "+String(index+1).padStart(2,"0");$("task-title").textContent=c[0];$("task-description").textContent=c[1];$("task-topic").textContent=c[2];$("editor-label").textContent=track==="godot"?"EDITOR GDSCRIPT · GODOT":"EXEMPLO GML · GAME MAKER";$("editor-area").hidden=track!=="godot";$("gml-area").hidden=track!=="gml";$("complete").textContent=isDone(index)?"Desmarcar conclusão ↶":"Marcar desafio como concluído ✓";$("challenge-count").textContent=data.length+" atividades";renderList();updateProgress();if(track==="godot")$("runner").src="https://coddy.tech/embed-editor?lang=godot&theme=dark&layout=side&code="+b64url(c[3])+"&credit=0"}
-function updateProgress(){const data=track==="godot"?godot:gml;let n=data.filter((_,i)=>isDone(i)).length;$("progress-label").textContent=Math.round(n/data.length*100)+"%";$("progress-bar").style.width=(n/data.length*100)+"%";$("progress-count").textContent=n+" de "+data.length+" desafios";let xp=0;["godot","gml"].forEach(t=>{try{xp+=JSON.parse(localStorage.getItem("codelab-"+t)||"[]").length*10}catch{}});$("xp").textContent="★ "+xp+" XP"}
+function renderList(){const data=track==="godot"?godot:gml;$("challenge-list").innerHTML=data.map((c,i)=>'<button class="challenge '+(i===index?'active':'')+'" data-index="'+i+'"><span class="num">'+String(i+1).padStart(2,"0")+'</span><span><b>'+c[0]+'</b><small>'+c[4]+'</small></span></button>').join("");document.querySelectorAll(".challenge").forEach(b=>b.onclick=()=>{index=Number(b.dataset.index);render()})}
+function render(){const c=current(),data=track==="godot"?godot:gml;$("track-title").textContent=track==="godot"?"Exemplos Godot":"Exemplos GameMaker";$("track-sub").textContent=track==="godot"?"Consulte, edite e execute exemplos de GDScript.":"Consulte exemplos de lógica e desenvolvimento de jogos com GML.";$("task-level").textContent="EXEMPLO · "+String(index+1).padStart(2,"0")+" · "+c[4];$("task-title").textContent=c[0];$("task-description").textContent="Este exemplo demonstra: "+c[1];$("task-topic").textContent=c[2];$("editor-label").textContent=track==="godot"?"EDITOR GDSCRIPT · GODOT":"CÓDIGO GML · GAMEMAKER";$("editor-area").hidden=track!=="godot";$("gml-area").hidden=track!=="gml";$("challenge-count").textContent=data.length+" exemplos";renderList();if(track==="godot")$("runner").src="https://coddy.tech/embed-editor?lang=godot&theme=dark&layout=side&code="+b64url(c[3])+"&credit=0"}
 document.querySelectorAll(".track").forEach(b=>b.onclick=()=>{track=b.dataset.track;index=0;document.querySelectorAll(".track").forEach(x=>x.classList.toggle("active",x===b));render()});
-$("complete").onclick=()=>{let a=[];try{a=JSON.parse(localStorage.getItem("codelab-"+track)||"[]")}catch{};if(a.includes(index))a=a.filter(x=>x!==index);else a.push(index);localStorage.setItem("codelab-"+track,JSON.stringify(a));render();$("toast").textContent=a.includes(index)?"Desafio concluído · +10 XP":"Conclusão removida";$("toast").style.display="block";setTimeout(()=>$("toast").style.display="none",1800)};
 render();
 </script></body></html>
